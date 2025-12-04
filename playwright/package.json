@@ -3,8 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "test": "npx playwright test",
-    "test:headed": "npx playwright test --headed"
+    "test": "node run-tests-with-slack.js",
+    "test:headed": "npx playwright test --headed",
+    "test:default": "npx playwright test",
+    "test:slack": "SLACK_WEBHOOK_URL=$SLACK_WEBHOOK_URL CI_BUILD_URL=$CI_BUILD_URL node run-tests-with-slack.js"
   },
   "dependencies": {
     "dotenv": "^16.3.1",

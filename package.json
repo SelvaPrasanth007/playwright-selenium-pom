@@ -1,0 +1,24 @@
+{
+  "name": "playwright-selenium-pom",
+  "version": "1.0.0",
+  "description": "Comprehensive test automation project with Playwright, API testing, and Slack integration",
+  "main": "test-runner-slack.js",
+  "scripts": {
+    "test": "node test-runner-slack.js",
+    "test:api": "cd api && npm test",
+    "test:playwright": "cd playwright && npm test",
+    "test:with-slack": "SLACK_WEBHOOK_URL=$SLACK_WEBHOOK_URL CI_BUILD_URL=$CI_BUILD_URL node test-runner-slack.js"
+  },
+  "keywords": [
+    "playwright",
+    "testing",
+    "automation",
+    "api-testing",
+    "slack-integration"
+  ],
+  "author": "Selva Prasanth",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
