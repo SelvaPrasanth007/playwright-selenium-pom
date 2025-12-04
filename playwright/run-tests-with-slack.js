@@ -3,12 +3,26 @@
 /**
  * Playwright Test Runner with Slack Integration
  * Executes Playwright tests and sends comprehensive results to Slack
+ * Automatically loads environment variables from .env.slack file
  */
 
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 const https = require('https');
+
+// Load environment variables from .env.slack if it exists
+const envSlackPath = path.join(__dirname, '.env.slack');
+if (fs.existsSync(envSlackPath)) {
+  const envContent = fs.readFileSync(envSlackPath, 'utf8');
+  envContent.split('\n').forEach(line => {
+    const [key, ...valueParts] = line.split('=');
+    const value = valueParts.join('=').trim();
+    if (key && value && !process.env[key]) {
+      process.env[key] = value;
+    }
+  });
+}
 
 // Configuration - use environment variables
 const SLACK_WEBHOOK_URL = process.env.SLACK_WEBHOOK_URL;
@@ -379,11 +393,13 @@ class PlaywrightTestRunner {
       console.log('🚀 Starting Playwright Test Runner with Slack Integration\n');
       
       if (!SLACK_WEBHOOK_URL) {
-        console.warn('⚠️  Warning: SLACK_WEBHOOK_URL environment variable not set');
-        console.warn('Set it with: export SLACK_WEBHOOK_URL="your-webhook-url"\n');
+        console.warn('⚠️  Warning: SLACK_WEBHOOK_URL not configured');
+        console.warn('Set it in .env.slack or via environment variable\n');
+      } else {
+        console.log('✅ Slack webhook configured');
       }
       
-      console.log(`CI Build: ${CI_BUILD_URL}\n`);
+      console.log(`📍 CI Build: ${CI_BUILD_URL}\n`);
 
       // Run tests
       await this.runTests();
